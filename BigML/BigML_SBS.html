@@ -1,0 +1,541 @@
+
+    <html>
+        <head>
+            <style type="text/css">
+                .workflow-report{
+                    color: rgb(51,51,51);
+                    font: 13px/20px "Helvetica Neue",Helvetica, arial, Verdana, sans-serif;
+                    font-weight: 400;
+                    text-align: left;
+                    padding: 20px;
+                    margin: 0 auto;
+                    max-width: 990px;
+                }
+                .workflow-report h2{
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                .workflow-report h3{
+                    font-size: 14px;
+                    font-weight: 400;
+                    margin-bottom: 10px;
+                    background-color: rgba(0,0,0,0.1);
+                    padding: 10px 12px 8px;
+                    border-radius: 2px;
+                    line-height: 20px;
+                    max-height: 139px;
+                    overflow-y: auto;
+                }
+                .workflow-report section, .workflow-report #summary{
+                    margin-bottom: 35px;
+                }
+                .workflow-report p{
+                    margin-top:10px;
+                }
+                .workflow-report span, .workflow-report p{
+                    color: rgb(85,85,85);
+                }
+                .workflow-report span.output{
+                    color: rgb(102,102,102);
+                    font-size: 16px;
+                    font-style: italic;
+                    margin-top: -10px;
+                    margin-bottom: 16px;
+                    text-align: center;
+                    display:block;
+                    padding-bottom:6px;
+                }
+                .workflow-report div.step{
+                    background-color: rgb(156,190,38);
+                    color: rgb(255,255,255);
+                    padding: 3px 3px 2px 12px;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    font-size: 12px;
+                    border-radius: 2px;
+                }
+                .workflow-report p i, .workflow-report span i{
+                    font-style: italic;
+                    color:rgb(0,0,0);
+                }
+                .workflow-report span.user_data i{
+                    font-style: italic;
+                    font-weight: 600;
+                    color:rgb(0,0,0);
+                }
+                .workflow-report span strong{
+                    font-weight: bold;
+                    color:rgb(0,0,0);
+                }
+                .workflow-report span.user_data strong{
+                    font-style: italic;
+                    font-weight: 600;
+                    color:rgb(0,0,0);
+                }
+                .workflow-report i.id{
+                    background: rgba(131,180,19,0.13);
+                    padding: 1px 2px;
+                }
+                .workflow-report pre{
+                    padding: 1em;
+                    line-height: 1.8em;
+                    position: relative;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    border-radius: 3px;
+                    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+                    -moz-box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+                    -webkit-box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+                    text-shadow: none;
+                    white-space: pre-wrap;
+                    background: #fff;
+                    border: 2px solid rgb(220,220,220);
+                    font: 13px Monaco, Courier, MonoSpace, serif;
+                    color: rgb(50,50,50);
+                    width:100%;
+                    vertical-align:top;
+                    display:inline-block;
+                    text-align:left;
+                    box-sizing:border-box;
+                    max-height:360px;
+                    overflow: auto;
+                    overflow-y:auto;
+                }
+                .workflow-report div.list_steps_header{
+                    line-height:24px;
+                    margin-top: 10px;
+                }
+                .workflow-report div.list_steps_body{
+                    margin-top: 4px;
+                }
+                .workflow-report div.list_steps_item{
+                    padding: 2px 0 4px;
+                    text-decoration: none;
+                }
+                .workflow-report div.list_steps_item .step_ball{
+                    text-align: center;
+                    border-radius: 2px;
+                    min-width: 20px;
+                    background-color: rgb(156,190,38);
+                    color: rgb(255,255,255);
+                    font-weight: bold;
+                    margin-right: 6px;
+                    padding: 0 6px 1px;
+                    font-style: normal;
+                    text-decoration: none;
+                }
+                .workflow-report div.list_steps_item i.step_ball{
+                    color: transparent;
+                    display: inline-block;
+                    height: 5px;
+                    min-width: 16px;
+                    padding: 0;
+                    vertical-align: middle;
+                }
+                .workflow-report a{
+                    text-decoration:none;
+                    color: #749201;
+                    outline: none;
+                }
+                .workflow-report a:hover{
+                    text-decoration:none;
+                }
+                .workflow-report a:hover div.list_steps_item .step_ball{
+                    background-color: rgb(50,50,50);
+                }
+                .workflow-report .copy_pre{
+                    float: none;
+                    display: none;
+                    margin-top: 14px;
+                    vertical-align: top;
+                    position: absolute;
+                    top: 4px;
+                    right: 18px;
+                }
+                .workflow-report .copy_pre span{
+                    width: 32px;
+                }
+                .workflow-report .code_report{
+                    text-align: center;
+                    position: relative;
+                    width:100%;
+                    margin:0 auto;
+                }
+                .workflow-report code{
+                    font-weight:bold;
+                }
+                .workflow-report a.hash .icon-link {
+                    background: url(https://static.bigml.com/static/img/icon_link.png) no-repeat scroll left 47% rgba(0, 0, 0, 0);
+                    height: 20px;
+                    visibility: hidden;
+                    width: 26px;
+                    background-size: 24px;
+                    display: block;
+                    margin-top: 0;
+                }
+                .workflow-report .icon-link:hover{
+                    opacity: 0.8;
+                }
+                .workflow-report .back_to_header {
+                    float: right;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 3px;
+                    text-align: center;
+                }
+                .workflow-report .back_to_header a {
+                    color: rgb(255,255,255);
+                    display: block;
+                    width: 22px;
+                    height: 20px;
+                    font-size: 16px;
+                    line-height: 19px;
+                }
+                .workflow-report .back_to_header:hover {
+                    background:rgb(169,212,2);
+                }
+                .workflow-report a.hash.icon {
+                    display: inline-block;
+                    width: 26px;
+                    height: 20px;
+                    vertical-align: middle;
+                    margin-left: 5px;
+                    margin-top: 0;
+                }
+                .workflow-report .print_icon{
+                    display: block;
+                    font-size: 20px;
+                    padding: 0;
+                    text-align: right;
+                    cursor: pointer;
+                }
+                .workflow-report div.step:hover a.hash .icon-link {
+                  visibility: visible;
+                }
+                .workflow_report_logo{
+                    text-align:center;
+                    padding:20px;
+                    font-size:12px;
+                }
+                .workflow_report_logo a:hover{
+                    text-decoration:none;
+                }
+                .workflow_report_logo img{
+                    width:60px;
+                    padding:0 6px;
+                }
+                @media screen and (min-width: 768px){
+                    .workflow-report .code_report{
+                        width:80%;
+                    }
+                }
+                @media print{
+                    #resource-workflow-report .header,
+                    .workflow-report .back_to_header,
+                    .workflow-report span.icon-link {
+                        display: none;
+                    }
+                    .workflow-report span.output{
+                        border-bottom:1px solid rgba(0,0,0,0.4);
+                    }
+                    .workflow-report div.list_steps_item .step_ball{
+                        background: none;
+                        border:1px solid rgba(0,0,0,0.4);
+                        color:rgb(0,0,0);
+                    }
+                    .workflow-report pre{
+                        box-shadow: none;
+                        text-shadow: none;
+                        white-space: pre-wrap;
+                        background-color: transparent;
+                        border: 1px solid rgba(0,0,0,0.4);
+                        color: rgb(0,0,0);
+                        max-height: inherit;
+                    }
+                    .workflow-report i.id{
+                        background: rgba(0,0,0,0.13);
+                    }
+                    .workflow-report div.step{
+                        background-color: transparent;
+                        color: rgb(0,0,0);
+                        border:1px solid rgba(0,0,0,0.4);
+                    }
+                    .workflow-report h3{
+                        background-color: transparent;
+                        padding: 0;
+                        border-radius: 2px;
+                        max-height: inherit;
+                    }
+                    .workflow-report .print_icon{
+                        display:none;
+                    }
+                }
+
+            </style>
+        </head>
+        <body>
+            <div id="rheader" class="workflow-report">
+                <div id="header">
+                    <a class="print_icon" onclick="window.print();">🖨</a>
+                    <h2>Data SBSriskScore | Training (75%)</h2>
+                    <span class="output">deepnet/6311e17b8f679a2d49001087</span>
+                    <h3><p>Workflow for Data SBSriskScore | Training (75%)</p></h3>
+                </div>
+                <div id="summary">
+                    <div class="list_steps_header">
+                        <span>
+                            The sequence of resources created to generate the <strong>deepnet</strong> was:
+                        </span>
+                    </div>
+                    <div class="list_steps_body">
+                            <a href="#2step">
+                                <div class="list_steps_item">
+                                    <span>
+                                        <i class="step_ball">•</i>
+                                        <code>Dataset</code>
+                                        Data SBSriskScore
+                                        :<i class="id">513 instances, 9 fields (7 categorical, 2 numeric), 1 non-preferred</i>
+                                    </span>
+                                </div>
+                            </a>
+                            <a href="#4step">
+                                <div class="list_steps_item">
+                                    <span>
+                                        <i class="step_ball">•</i>
+                                        <code>Dataset</code>
+                                        Data SBSriskScore | Training (75%)
+                                        :<i class="id">384 instances, 9 fields (7 categorical, 2 numeric), 1 non-preferred, sample rate=0.75</i>
+                                    </span>
+                                </div>
+                            </a>
+                            <a href="#5step">
+                                <div class="list_steps_item">
+                                    <span>
+                                        <i class="step_ball">•</i>
+                                        <code>Deepnet</code>
+                                        Data SBSriskScore | Training (75%)
+                                        :<i class="id">auto network search, 128 networks evaluated, missing values, max. training time=900, training duration=5</i>
+                                    </span>
+                                </div>
+                            </a>
+                    </div>
+                </div>
+                <section id="1step">
+                    <div class="step">
+                        Step 1
+                        <a id="step_1" href="/dashboard/deepnet/6311e17b8f679a2d49001087/workflowreport/63121f86aba2df532800108e#1step" class='hash icon'>
+                            <span class='icon-link'/>
+                        </a>
+                        <div class="back_to_header">
+                            <a href="#rheader">&#x21e7;</a>
+                        </div>
+                    </div>
+                        <p>
+                            The source <i class="id">source/63119708aba2df5322001134</i> was modified to:
+                        </p>
+                        <div class="code_report">
+                            <pre>{
+    &quot;fields&quot;: {
+        &quot;000006&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;co2.cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000007&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;airflow.cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000004&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;tvoc.cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000005&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;metsec.cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000002&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;hcho.cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000003&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;pm2.5cat&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000000&quot;: {
+            &quot;optype&quot;: &quot;numeric&quot;,
+            &quot;name&quot;: &quot;ID&quot;
+        },
+        &quot;000001&quot;: {
+            &quot;optype&quot;: &quot;categorical&quot;,
+            &quot;name&quot;: &quot;sbs_status&quot;,
+            &quot;term_analysis&quot;: {
+                &quot;enabled&quot;: true
+            }
+        },
+        &quot;000008&quot;: {
+            &quot;optype&quot;: &quot;numeric&quot;,
+            &quot;name&quot;: &quot;riskscore&quot;
+        }
+    }
+}</pre>
+                            <div id="reportjson-copycontent" class="copy_pre action drop_down button-icon tipsy-tooltip" original-title="Copy to Clipboard">
+                                <a class="js-copy-reportjson js-copy-it copy_clipboard link" style="cursor: pointer;">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div>
+                </section>
+                <section id="2step">
+                    <div class="step">
+                        Step 2
+                        <a id="step_2" href="/dashboard/deepnet/6311e17b8f679a2d49001087/workflowreport/63121f86aba2df532800108e#2step" class='hash icon'>
+                            <span class='icon-link'/>
+                        </a>
+                        <div class="back_to_header">
+                            <a href="#rheader">&#x21e7;</a>
+                        </div>
+                    </div>
+                        <p><span class="user_data">User <i>myibrick</i> created the dataset <strong>Data SBSriskScore</strong></span>
+                        (<i class="id">513 instances, 9 fields (7 categorical, 2 numeric), 1 non-preferred</i> - <i class="id">dataset/6311e0178f679a2d4300117f</i>)
+                         from <strong>source/63119708aba2df5322001134</strong>
+                         using as configuration:</p>
+                        <div class="code_report">
+                            <pre>{
+    &quot;all_fields&quot;: true,
+    &quot;objective_field&quot;: {
+        &quot;id&quot;: &quot;000008&quot;,
+        &quot;name&quot;: &quot;riskscore&quot;
+    }
+}</pre>
+                            <div id="reportjson-copycontent" class="copy_pre action drop_down button-icon tipsy-tooltip" original-title="Copy to Clipboard">
+                                <a class="js-copy-reportjson js-copy-it copy_clipboard link" style="cursor: pointer;">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div>
+                </section>
+                <section id="3step">
+                    <div class="step">
+                        Step 3
+                        <a id="step_3" href="/dashboard/deepnet/6311e17b8f679a2d49001087/workflowreport/63121f86aba2df532800108e#3step" class='hash icon'>
+                            <span class='icon-link'/>
+                        </a>
+                        <div class="back_to_header">
+                            <a href="#rheader">&#x21e7;</a>
+                        </div>
+                    </div>
+                        <p>
+                            The dataset <i class="id">dataset/6311e0178f679a2d4300117f</i> was modified to:
+                        </p>
+                        <div class="code_report">
+                            <pre>{
+    &quot;fields&quot;: {
+        &quot;ID&quot;: {
+            &quot;preferred&quot;: false
+        }
+    },
+    &quot;objective_field&quot;: {
+        &quot;id&quot;: &quot;000008&quot;,
+        &quot;name&quot;: &quot;riskscore&quot;
+    }
+}</pre>
+                            <div id="reportjson-copycontent" class="copy_pre action drop_down button-icon tipsy-tooltip" original-title="Copy to Clipboard">
+                                <a class="js-copy-reportjson js-copy-it copy_clipboard link" style="cursor: pointer;">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div>
+                </section>
+                <section id="4step">
+                    <div class="step">
+                        Step 4
+                        <a id="step_4" href="/dashboard/deepnet/6311e17b8f679a2d49001087/workflowreport/63121f86aba2df532800108e#4step" class='hash icon'>
+                            <span class='icon-link'/>
+                        </a>
+                        <div class="back_to_header">
+                            <a href="#rheader">&#x21e7;</a>
+                        </div>
+                    </div>
+                        <p><span class="user_data">User <i>myibrick</i> created the dataset <strong>Data SBSriskScore | Training (75%)</strong></span>
+                        (<i class="id">384 instances, 9 fields (7 categorical, 2 numeric), 1 non-preferred, sample rate=0.75</i> - <i class="id">dataset/6311e02b8be2aa714b000edd</i>)
+                         from <strong>dataset/6311e0178f679a2d4300117f</strong>
+                         using as configuration:</p>
+                        <div class="code_report">
+                            <pre>{
+    &quot;all_fields&quot;: true,
+    &quot;seed&quot;: &quot;961d5360ce839bbf6eb82df3679859d4a744085c&quot;,
+    &quot;sample_rate&quot;: 0.75,
+    &quot;objective_field&quot;: {
+        &quot;id&quot;: &quot;000001&quot;,
+        &quot;name&quot;: &quot;sbs_status&quot;
+    }
+}</pre>
+                            <div id="reportjson-copycontent" class="copy_pre action drop_down button-icon tipsy-tooltip" original-title="Copy to Clipboard">
+                                <a class="js-copy-reportjson js-copy-it copy_clipboard link" style="cursor: pointer;">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div>
+                </section>
+                <section id="5step">
+                    <div class="step">
+                        Step 5
+                        <a id="step_5" href="/dashboard/deepnet/6311e17b8f679a2d49001087/workflowreport/63121f86aba2df532800108e#5step" class='hash icon'>
+                            <span class='icon-link'/>
+                        </a>
+                        <div class="back_to_header">
+                            <a href="#rheader">&#x21e7;</a>
+                        </div>
+                    </div>
+                        <p><span class="user_data">User <i>myibrick</i> created the deepnet <strong>Data SBSriskScore | Training (75%)</strong></span>
+                        (<i class="id">auto network search, 128 networks evaluated, missing values, max. training time=900, training duration=5</i> - <i class="id">deepnet/6311e17b8f679a2d49001087</i>)
+                         from <strong>dataset/6311e02b8be2aa714b000edd</strong>
+                         using as configuration:</p>
+                        <div class="code_report">
+                            <pre>{
+    &quot;search&quot;: true,
+    &quot;input_fields&quot;: [
+        &quot;hcho.cat&quot;,
+        &quot;pm2.5cat&quot;,
+        &quot;tvoc.cat&quot;,
+        &quot;metsec.cat&quot;,
+        &quot;co2.cat&quot;,
+        &quot;airflow.cat&quot;,
+        &quot;riskscore&quot;
+    ],
+    &quot;deepnet_seed&quot;: &quot;2c249dda00fbf54ab4cdd850532a584f286af5b6&quot;,
+    &quot;max_training_time&quot;: 900,
+    &quot;suggest_structure&quot;: false
+}</pre>
+                            <div id="reportjson-copycontent" class="copy_pre action drop_down button-icon tipsy-tooltip" original-title="Copy to Clipboard">
+                                <a class="js-copy-reportjson js-copy-it copy_clipboard link" style="cursor: pointer;">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div>
+                </section>
+                <div class="workflow_report_logo">
+                    <img src="https://static.bigml.com/static/img/bigml_logo.png">
+                </div>
+            </div>
+        </body>
+    </html>
+    
