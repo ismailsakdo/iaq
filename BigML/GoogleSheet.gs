@@ -5,7 +5,7 @@ function doGet(e) {
     result = 'No Parameters';
   }
 else {
-  var sheet_id = '1fN9Ov1L8cPDuBRDMgQYGP6vPYliNrAM3nzR_2aPLUTc'; // Spreadsheet ID
+  var sheet_id = 'yourgooglesheetlinkbeforeedit'; // Spreadsheet ID
   var sheet = SpreadsheetApp.openById(sheet_id).getActiveSheet();
   var newRow = sheet.getLastRow() + 1; 
   var rowData = [];
@@ -100,6 +100,6 @@ function sendEmail(){
   
   if(lastCell=="Poor")
   {
-    GmailApp.sendEmail("mywataverse@gmail.com", "Alert", "Humidex Trigger, check temperature and humidity in the location. Alert 1 Activated");
+    GmailApp.sendEmail("youremail@gmail.com", "Alert", "Humidex Trigger, check temperature and humidity in the location. Alert 1 Activated");
   } 
 }
